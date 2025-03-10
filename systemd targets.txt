@@ -1,0 +1,24 @@
+Selecting a Target at Runtime
+On a running system, administrators can switch to a different target using the systemctl isolate command.
+
+[root@host ~]# systemctl isolate multi-user.target
+
+*************************************************************
+Setting a Default Target
+[root@host ~]# systemctl get-default
+multi-user.target
+[root@host ~]# systemctl set-default graphical.target
+
+***************************************************************
+
+Selecting a Different Target at Boot Time
+To select a different target at boot time, append the systemd.unit=target.target option to
+the kernel command line from the boot loader
+
+
+systemd.unit=rescue.target
+
+***************************************************
+
+
+series vs parallel

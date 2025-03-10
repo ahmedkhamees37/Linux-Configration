@@ -1,0 +1,70 @@
+
+##Server################################################
+#conf file
+nano  /etc/rsyslog.conf
+
+# 1-uncomment Input modue udp config 
+#module(load="imudp") # needs to be done just once
+#input(type="imudp" port="514")
+
+#2- restart your service 
+systemctl  restart  rsyslog.service
+ 
+3-firewall 
+  firewall-cmd --add-service=syslog --permanent
+  firewall-cmd  --reload
+
+
+##Client   ######################################################
+man 5 rsyslog.conf
+
+All logs  with all priorites  in this file
+
+*.*  /var/log/file.log
+
+
+
+All logs  with all priorites  to remote server
+ 
+*.*  @192.168.1.100
+
+#2- restart your service 
+systemctl  restart  rsyslog.service
+ 
+#######################################################
+#On Client
+#1-configuration 
+nano  /etc/rsyslog.conf   # at the end of the file
+
+*.*         @192.168.1.100
+*.err       @192.168.1.100
+*.critical  @192.168.1.100
+corn.*      @192.168.1.100
+mail.*      @192.168.1.100
+mail.err    @192.168.1.100
+
+#2- restart your service 
+systemctl  restart  rsyslog.service
+
+#testing
+restart any service  or use logger -i "message"
+
+########################################################
+files
+/var/log/messages
+/var/log/secure
+/var/log/httpd/-
+
+#######################################################
+
+last command
+laslog
+#########################################
+/proc
+
+
+
+
+
+
+ 

@@ -1,0 +1,83 @@
+init script
+ls  /etc/init.d/network
+unit files
+ls  /etc/systemd/system/multi-user.target.wants/sshd.service
+
+#control
+systemctl status crond
+#active  enabled
+
+systemctl  disable crond
+
+systemctl  status crond
+
+restart
+---------------------------
+systemctl  start crond
+systemctl  enable crond
+
+#systemctl   enable  --now    httpd.service
+---------------------
+systemctl  is-enabled crond
+systemctl  is-active crond
+
+systemctl  poweroff
+systemctl  reboot  
+--------
+systemctl  mask crond   #doesnot startany way
+systemctl  start crond
+
+systemctl  unmask crond
+systemctl  start crond
+---------------------------------
+init commands
+service crond status
+chkconfig   crond  on
+init runlvelno  #init 5
+--------------------------------------
+systemctl get-default
+
+systemctl  set-default multi-user.target
+
+reboot
+
+----------------------------
+systemctl isolate graphical.target
+
+------------------------------------
+configuration files
+ls /etc/systemd
+ls /etc/systemd/system
+--------------------------
+system list units          
+
+
+systemctl list-units --type=service --all
+
+systemctl list-dependencies sshd.service
+
+
+
+Selecting a Target at Runtime
+On a running system, administrators can switch to a different target using the systemctl isolate command.
+[root@host ~]# systemctl isolate multi-user.target
+
+
+Setting a Default Target
+[root@host ~]# systemctl get-default
+multi-user.target
+[root@host ~]# systemctl set-default graphical.target
+
+
+Selecting a Different Target at Boot Time
+To select a different target at boot time, append the systemd.unit=target.target option to
+the kernel command line from the boot loader
+
+
+systemd.unit=rescue.target
+
+
+
+
+
+

@@ -1,0 +1,112 @@
+selinux
+
+semanage 
+
+
+chcon -t shadow_t  index.html
+
+restorecon -VR /var/www.html/         v--verbose       R Recursive
+
+semanage   boolean -l                               # yum install policycoreutils-python-utils
+
+semanage port -a -t http_port_t -p tcp 6666
+
+
+
+##########################3
+semanage fcontext -a -t httpd_sys_content_t '/custom(/.*)?'
+restorecon -Rv /custom
+
+###########
+
+sestatus
+
+sealert -l   UUID 
+systemctl status auditd       (selinux log service)
+########################################################################33
+DEFINING SELINUX DEFAULT FILE CONTEXT RULES
+
+root@server ~]#semanage fcontext -a add -t type /directory
+[root@server ~]#restorecon -R recursive -v verbous /directory
+
+nano /etc/ssh/sshd_config ==> ssh configuration file
+
+semanage fcontext -a  -t home_root_t /etc/ssh/sshd_config
+restorecon -Rv   /etc/ssh/sshd_config
+
+#dir
+semanage fcontext -m  -t "shadow_t"    '/mnt/website(/.*)?' 
+restorecon -Rv   /mnt/website
+
+
+#################################################
+
+MONITORING SELINUX VIOLATIONS  page 161
+
+sealert -l UUID
+Use sealert -a /var/log/audit/audit.log to produce reports for all incidents in that file
+
+######################################################################
+To search the /var/log/audit.log file use the ausearch command. 
+The -m    searches on the message type. 
+The -ts   option searches based on time.
+
+ausearch -m AVC -ts recent
+
+#########################################################################
+
+Creating or Adding Ports with Semanage
+
+semanage port -a -t PORT_TYPE -p tcp 82
+semanage port -a -t http_port_t  -p tcp 82
+
+semanage port -l | grep -w http_port_t
+
+# semanage port -a -t http_port_t -p tcp 2222
+to view the newly created port, we use the command list command with the -C option to show only customizations.
+
+
+semanage port -lC
+
+
+##To override an existing port that was already created, use the -m option to modify:
+
+# semanage port -m -t unreserved_port_t -p tcp 2222
+
+
+##Deleting Ports with Semanage
+
+semanage port -d -t unreserved_port_t -p tcp 2222
+
+
+#####################################################################################
+
+Using Semanage-Permmissive
+
+To create httpd_t a permissive domain, use the -a option:
+
+# semanage permissive -a httpd_t
+
+
+To delete a permissive type we just created, we use the -d option.
+
+# semanage permissive -d httpd_t
+
+################################################################
+
+getsebool -a | grep http
+semanage boolean -l
+
+setsebool -P httpd_enable_homedirs on
+-P option to make the changes persistent
+
+semanage boolean -l
+semanage boolean -lC 
+ 
+################################################
+
+
+###############################
+if your system has a GUI, you can install the policycoreutils-gui package via yum and then run 
+
+system-config-selinux

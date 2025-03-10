@@ -1,0 +1,101 @@
+NFS_summary
+
+*********************manual way*************************
+
+################### AT server machine#######################
+
+1-dnf install nfs-utils
+ 
+2-systemctl enable --now nfs-server (at server only) 
+
+3-check th firewall and allow the nfs serves
+	- firewall-cmd --parmameny --add-serves=nfs
+	- firewall-cmd --reload
+	- firewall-cmd --list-all 
+
+4-create the dir that i want to share 
+	*mkdir /external (example)
+
+5-to share the dir should add record in /etc/export --> (this file is related to nfs serves) 
+	-  /external 192.168.2.132(rw)
+		- /external (the dir path i want to share) 
+		- 192.168.2.132(rw) ==> (it's the client ip i want to give him access) and (rw) is the option 
+
+6-exportfs -r or exportfs -a for many files==> (this command the reload the export file to make nfs serves aware to changes in export file )
+
+7- exportfs (to checkthe shared file)
+
+8- exportfs -v (to list the default option like (rw) )
+
+
+################### AT client machine ###################
+
+
+1- to list the share dir for a specific server use 
+	- showmount -e ip_of_server
+	- this comman is use the rpc-bind serves and mountd in the server machine so us should ass them first 
+		#firewall-cmd --parmanent --add-service=rpc-bind --add-service=mountd
+		#firewall-cmd --reload
+or 
+2-  mount ip-of-server:/   /mnt
+
+	###############first way to mount the share dir###########
+1-mkdir  /mnt/external (create a dir used to mount)
+
+2-  mount ip-of-server:/external (example)   /mnt/external
+
+for permanent mount
+1- open /etc/fstab
+ 
+2- the add: ip-of-server:/external	/mnt/external  	nfs	defaults	0 0
+
+	###############second way to mount the share dir (autofs)###########
+In this way the file is Automount on demand and when i don't use to the dir is umount auto after 5 min (default value time)
+
+
+		********** direct map ************** 
+1- dnf install autonfs
+
+2- create a file under /etc/auto.master.d/
+	-touch (or vim) /etc/auto.master.d/(anyname).autofs
+3- then vim or nano the file and write this ==> /shares  /etc/auto.demo	
+	- (write inside /etc/auto.master.d/(anyname).autofs) ==> /- /etc/auto.direct   (auto.direct is a dir where i will write the mount details )
+	-create the master map file   /etc/auto.direct using vim , this file contian the mount option details like (/external -rw,sync,fstype=fs4  ipofserver:/Path-Of-Share-dDir)  
+
+4- systemctl enable --now autofs
+
+5- if you use df -h to show the mount dir, you won't find it because by deafult it is umount until you use it for example echo "hello" > /externa/testing.txt then use df -h in this case you shile show the monut dir from nfs and after 5 min will disappear
+
+
+
+		********** indirect map **************
+
+1- dnf install autonfs
+
+2- create a file under /etc/auto.master.d/
+	-touch (or vim) /etc/auto.master.d/(anyname).autofs
+3- then vim or nano the file and write this ==> /shares  /etc/auto.demo	
+	- (write inside /etc/auto.master.d/(anyname).autofs) ==> /internal  /etc/auto.indirect  (/internal is the base dir where the autofs when auto mount a dir is mount it in internal and etc/auto.indirect is where i write my mount option like (rw) )
+	- create the master map file   /etc/auto.indirect using vim , this file contian the mount option details in case of indirect the line start with * (* -rw,sync,fstype=f  ipofserver:/Path-Of-Share-dDir/&  (& is mean to mount the subdir under the path of dir i shared) )
+
+4- systemctl enable --now autofs
+
+5- if you use df -h to show the mount dir, you won't find it because by deafult it is umount until you use it for example echo "hello" > /externa/test/testing.txt then use df -h in this case you shile show the monut dir from nfs and after 5 min will disappear
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,49 @@
+
+ifconfig   ---package net-tools
+ip a s
+
+
+/etc/hosts
+/etc/resolv.conf
+resolve domain   1-cache   2-hosts file  3- dns resolver (nameserver 8.8.8.8)   
+   
+hostname   test10       -----runing config
+hostnamectl   set-hostname   test10     ----runing config and permanent config(/etc/hostname)
+
+nano /etc/hostname ---test10 --- effect on next reboot
+
+
+netstat  -ltpn ,     ss   -ltpn
+
+route -n 
+route del   default gw 192.168.1.1
+route add   default gw 192.168.1.1
+
+old Config files
+[root@newsrv ~]# ls /etc/sysconfig/network-scripts/ifcfg-eth0
+
+new Config files
+[root@newsrv ~]# ls  /etc/NetworkManager/system-connections/
+
+1-gui
+2-nmtui
+3-nmcli
+how to add new connection
+nmcli connection add con-name    work  ifname ens33   type ethernet  ipv4.method manual  
+ipv4.addresses  192.168.44.100/24 ipv4.gateway 192.168.44.2 ipv4.dns 4.2.2.2 +ipv4.dns 8.8.8.8
+
+
+
+
+
+how to Modify connection
+1- nmcli
+nmcli connection modify work ipv4.addresses 192.168.44.222/24  
+nmcli connection up work 
+
+2-Manual   edit connection file ---------reload 
+#nmcli connection reload work  (after manual config)
+nmcli connection up work
+
+nmcli --------conf
+autoconnect yes 

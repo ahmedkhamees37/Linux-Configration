@@ -1,0 +1,33 @@
+Key-based auth (ssh passwordless)
+
+###At Client
+1-generate key pair
+ssh-keygen
+
+2-copy public key to Server
+ssh-copy-id  -p 22222   qena1@139.162.253.69
+
+3-test 
+
+ssh  -i ~/id_rsa  -p 22222   qena1@139.162.253.69
+
+#**************************************************
+##SCP
+#upload
+
+scp -P22222  -r    ./Gamal   ./g1.txt       qena1@139.162.253.69:/home/qena1
+
+#Download
+
+scp -P22222  -r   qena1@139.162.253.69:/home/qena1/test       ./Desktop
+
+#*****************************************
+#SFTP
+sftp   -P22222  qena1@139.162.253.69
+
+#upload
+put /etc/passwd    /tmp
+
+#download
+get  /etc/passwd      .
+

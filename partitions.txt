@@ -1,0 +1,70 @@
+1- Creat Partition              fdisk  /dev/sdb   n   p        +3G  w
+2- make filesystem              mkfs -t ext4        /dev/sdb1
+#Temp mount
+3- mount your filesystem       mount /dev/sdb1    /mnt/data (empty dir, exist)
+                               show file system   df -h
+
+                               umount   /mnt/data  
+
+4-persistent mount  (/etc/fstab)
+/dev/sdb8        /mnt/test      xfs   defaults    0   0
+UUID
+LABEL
+
+mount -av
+
+####################################################################
+   fdisk /dev/sdb    n l   w   
+  /dev/sdb1      /mnt/test     
+
+  mkfs  -t xfs   /dev/sdb8
+  mkdir   /mnt/test
+  mount /dev/sdb8   /mnt/test/
+  ###partprobe /dev/sdb
+    df -Th
+  #####cat /etc/mtab 
+  nano /etc/fstab 
+  /dev/sdb8        /mnt/test      xfs   defaults    0   0
+   umount /mnt/test
+   mount -av
+   df -hT
+#########################################################
+#delete PT
+1- umount your pt
+2- remove Entry from /etc/fstab
+3- fdisk   delete
+
+#####################################################################
+Rescan the SCSI Bus to Add a SCSI Device Without rebooting the VM
+echo "- - -" > /sys/class/scsi_host/host2/scan
+#############################################
+Swap  partition
+1- Creat Partition            fdisk  change type   t   82
+2- make swap                  mkswap  /dev/sdc1
+3- Enable swap on /dev/sdc1   swapon   /dev/sdc1   (Temp)
+4-persistent   /etc/fstab
+UUID=8fdf0b4c-a725-42be-a647-2591ed329ce5  swap   swap    defaults 0 0
+ 
+to check swapon  -av
+to see swap space   free -m   or swapon -s 
+####################################################
+SWap File
+    dd  if=/dev/zero    of=/swapfile1     bs=1M  count=1024 
+    mkswap   /swapfile1  
+    chmod    600 /swapfile1
+    swapon   /dev/swapfile1 
+4-persistent   /etc/fstab
+/swapfile1  swap   swap    defaults 0 0
+ 
+to check swapon  -av
+to see swap space   free -m   or swapon -s
+#####################################################
+
+
+
+
+
+
+
+
+#####################################################

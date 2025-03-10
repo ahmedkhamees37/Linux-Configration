@@ -1,0 +1,68 @@
+
+#To show permissions
+
+ls -l 
+
+#To show selinux context
+
+ls  -Z
+
+#to get status of eslinux
+
+sestatus 
+[root@server2 ~]# sestatus
+SELinux status:                 disabled
+
+#config file
+nano /etc/selinux/config
+
+#Modes   enforcing  permissive   disabled
+
+
+ls -ldZ /var/www/html       #files     
+ps aux -Z |grep -i httpd    #process    (note that they are in diffrent domains)
+
+Ex
+ls -lZ /etc/shadow
+
+chcon -t shadow_t    index.html
+
+
+restorecon -vR /var/www/html/
+
+------
+default  context file
+nano /etc/selinux/targeted/context/files/file-contexts
+
+newly added context file
+nano /etc/selinux/targeted/context/files/file-contexts.local
+
+#to show which service can access specific port
+semanage port -l |grep 21
+
+# To list Booleans
+semanage booleans -l
+
+getsebool -a
+getsebool httpd_enable_homedirs
+
+setsebool -P httpd_enable_homedirs on
+semanage boolean -l | grep httpd_enable_homedirs
+
+setsebool -P 
+
+/var/log/audit
+#To ses selinux logs gui
+sealert -b
+
+
+yum provides semanage
+policycoreutils-python-2.5-33.el7.x86_64
+
+
+
+
+semanage permissive -a httpd_t
+
+
+semanage permissive -d httpd_t

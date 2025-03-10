@@ -1,0 +1,100 @@
+
+package manager commands
+
+notes 
+1-All installation and removal transactions are logged in the /var/log/dnf.rpm.log file
+
+
+1-RPM
+--------------------------------------------------------------------INFO ABOUT RPM PKG----------------------------------------------------------
+1-  rpm -qa	---> list all installed packages 
+2-  rpm -qf [filename]	---> what package proveds this file (/etc/yum.repos.d file is provided by redhat-release-9.1-1.0.el9.x86_64)
+3-  rpm -q [pkg-name]	---> Lists the currently installed package version
+4-  rpm -qi [pkg-name]	---> list details about the pkg (name,version,release,arch,dicription,install date,...etc)
+5-  rpm -ql [pkg-name]	   --->list all files that installed with the package (like conf files and liberaries,...etc)
+6-  rpm -qc [pkg-name] 	  ---> list only configuration files of this pkg (files under /etc/ directory)
+7-  rpm -qd [pkg-name]   ---> list only documentation files of this pkg (files under /usr/share/man/ directory)
+8-  rpm -q --scripts [pkg-name]   ---> list all scripts that runs when you install, remove, or update this pkg 
+9-  rpm -q --changlog [pkg-name]   ---> list logs of all changes that happend to this packages (like updates and upgrades)
+10- rpm -qlp [pkg.rpm]   ---> if you downloaded the pkg and want to list all files this pkg will install(local pkg)
+
+--------------------------------------------------------------------Install RPM Packages----------------------------------------------------------
+rpm -i [pkg-nmae.rpm] install the pkg locally after dwonloading it
+	-v = verpose or show details of what is hapening 
+	-h = hash  or this # sympol if something  is downloaded of being installed
+-cpio = copy files to and from archives(لسه متشرحش)
+-rpm2cpio  extract files from rpm pkg witout installing it(لسه متشرحش) 
+
+#########################################################################################################################
+
+2-DNF AND YUM (YUM commands still exist as symbolic links to DNF)
+
+-----------------------------------------------Find Software with DNF----------------------------------------------------------
+1-  dnf list [pkg or k-word]   ---> will list all installed and avilable pkgs about this pkg or tool
+2-  dnf search all [KEYWORD]   ---> will list packages by keywords found in their name, summary, and description fields, use
+3-  dnf info [pkg-name]        ---> will list detailed information about a package(disk usage,source,name,version,release...etc)
+4-  dnf provide [file,dir,service...]    ---> find the (repo or pkgs) that provides tha file or dir or service...etc
+
+-------------------------------------------Install and Remove Software with DNF------------------------------------------
+1-  dnf install [pkg-name]  ---> search in the repo about the pkg and resolve its dependandces then, rpm installs its dpendances first then the pkg itself(على الجاهز)
+2-    dnf update [pkg-name   ---> resolve(download) the newer version of the pkg and installes it 
+3-  dnf update keranl    ---> 
+4-  dnf list kernel    ---> command will list all installed and available kernels.
+5-  uname -r    ---> show the kernal installed (working only) -a option shows additional info
+6-  dnf remove [pkg-name]   ---> removes the listed packages and any package that requires the packages to be removed
+
+-------------------------------------------Install and Remove Groups of Software with DNF------------------------------------------
+*groups are collections of related software that are installed together for a particular purpose*
+1-  dnf group list     ---> list or shows the names of installed and available groups
+2-  dnf froup info "group name"    ---> "" is a must  shows information about the  group, like (mandatory, default, and optional package names)
+3-  dnf group install "group name"   --->  installs a group that installs its mandatory and default packages and their dependent packages.
+
+-------------------------------------------Viewing History------------------------------------------
+*All installation and removal transactions are logged in the /var/log/dnf.rpm.log file*
+1-  dnf history   ---> displays a summary of installation and removal transactions
+2-  dnf history undo [ID]   --->  undo a command or reverses the transaction.
+ 
+-------------------------------------------Modularity (PKSs and versions)------------------------------------------
+1-  dnf module list   --->  simply lists the available modules
+2-  dnf module list [module-name]   ---> list the module streams(versions) for a specific modul.
+3-  dnf module inft [module-name]   --->  Display details of a module( --profile is used to specify a profile)
+4-  dnf module provides [PKG-name]   ---> Display which module provides a specific package
+
+#########################################################################################################################
+
+3-LOCAL REPOSITRY 
+
+------------------------------------------Enable Repositories------------------------------------------
+1-  dnf repolist   ---> list the enabled repositries 
+2-  dnf repolist all   ---> list  all enable/disabled repositries
+3-  dnf config-manager --enable [repo-name]   ---> to enable a repositry
+4-  dnf config-manager --disable [repo-name]   ------> to diabel a repositry
+
+------------------------------------------Enable Red Hat Software Repositories------------------------------------------
+*3 wayes to add a repositry*
+1- create a .repo file in the /etc/yum.repos.d/ directory    * file must be .repo* 
+[repo-name]
+name=Bala7-El-sham-repo
+baseurl= "اللينك بتجيبه من النت او من الأسطوانة عندك"
+enabled=1
+gpgcheck=0
+gpgkey=
+
+2- add a [repository] section to the /etc/dnf/dnf.conf 
+
+3- dnf config-manager \
+> --add-repo= "لينك الريبو" 
+	 .repo file will appear in the /etc/yum.repos.d/ directory:
+
+
+
+
+
+
+
+
+
+
+
+
+ 

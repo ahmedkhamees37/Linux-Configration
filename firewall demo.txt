@@ -1,0 +1,25 @@
+
+Zone0    eth0       ssh
+zone1    eth1       http
+------   eth2          nozone
+
+
+default   public-----------ftp
+
+zone5  ftp,http     source /24
+
+
+192.168.44.244   eth0
+192.168.176.139  eth1
+10.172.240.250   eth2
+
+firewall-cmd  --add-rich-rule="rule family="ipv4" source address="41.33.92.130/32"  service name="http" accept"
+
+firewall-cmd  --add-richrule="rule family="ipv4" source address="45.99.253.76/32" 
+service name="ssh" accept"
+
+
+
+
+firewall-cmd  --add-rich-rule="rule family="ipv4" source address="196.133.168.153/32" 
+service name="ssh" accept"

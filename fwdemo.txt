@@ -1,0 +1,7 @@
+
+192.168.44.200    eth0             zone0    http
+192.168.176.144   eth1             zone1    ssh 
+192.168.8.129     eth2              nozone            default zone  public   http ,ssh 
+
+
+zone5    no interfaces   sources      192.168.8.0/24     ftp
